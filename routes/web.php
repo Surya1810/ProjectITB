@@ -1,5 +1,10 @@
 <?php
 
+use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\BookingController;
+use App\Http\Controllers\BuddyController;
+use App\Http\Controllers\EquipmentController;
+use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -15,11 +20,27 @@ use Illuminate\Support\Facades\Route;
 */
 
 //Landing Page
-Route::get('/', function () {
-    return view('welcome');
-})->name('home');
+Route::get('/', [HomeController::class, 'index'])->name('home');
 
-//
+// Register Stage 2
+Route::post('/getting_ready/store/{id}', [HomeController::class, 'stage_2'])->name('stage_2.store');
+// Register Stage 3
+Route::post('/almost_finish/store/{id}', [HomeController::class, 'stage_3'])->name('stage_3.store');
+///////////////after stage 3 done, belum ada notif pop up
+///////////////button tutup sidebar
+///////////////slider touch swipe
+
 Auth::routes();
+Route::middleware(['auth'])->group(function () {
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+    Route::get('/almost_finish', function () {
+        return view('auth.stage_3');
+    })->name('stage_3');
+    Route::get('/getting_ready', function () {
+        return view('auth.stage_2');
+    })->name('stage_2');
+
+    Route::resource('buddy', BuddyController::class);
+    Route::resource('equipment', EquipmentController::class);
+    Route::resource('booking', BookingController::class);
+});

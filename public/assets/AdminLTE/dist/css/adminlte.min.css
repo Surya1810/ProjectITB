@@ -11288,7 +11288,7 @@ body:not(.layout-fixed) .main-sidebar .sidebar {
     animation-duration: 0s !important;
 }
 .dark-mode {
-    background-color: #454d55 !important;
+    background-color: #212121 !important;
     color: #fff;
 }
 .layout-navbar-fixed
