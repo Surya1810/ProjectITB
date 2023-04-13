@@ -28,7 +28,7 @@ Route::post('/getting_ready/store/{id}', [HomeController::class, 'stage_2'])->na
 Route::post('/almost_finish/store/{id}', [HomeController::class, 'stage_3'])->name('stage_3.store');
 ///////////////after stage 3 done, belum ada notif pop up
 ///////////////button tutup sidebar
-///////////////slider touch swipe
+///////////////animation if match
 
 Auth::routes();
 Route::middleware(['auth'])->group(function () {
@@ -40,7 +40,20 @@ Route::middleware(['auth'])->group(function () {
         return view('auth.stage_2');
     })->name('stage_2');
 
+    //Buddy
     Route::resource('buddy', BuddyController::class);
-    Route::resource('equipment', EquipmentController::class);
+    Route::get('/buddy/match/{id}', [BuddyController::class, 'match'])->name('buddy.match');
+    Route::post('/buddy/arrange', [BuddyController::class, 'arrange'])->name('buddy.arrange');
+
+    //Booking - Court
     Route::resource('booking', BookingController::class);
+    Route::get('/court/{id}', [BookingController::class, 'index'])->name('booking.list');
+    Route::get('/court/{category}/{id}', [BookingController::class, 'create'])->name('booking.detail');
+    // Route::post('/order/detail', [BookingController::class, 'store'])->name('order.detail');
+
+    //Eqt
+    Route::resource('equipment', EquipmentController::class);
+
+    //Order Detail
+    Route::get('/done', [EquipmentController::class, 'done'])->name('done');
 });

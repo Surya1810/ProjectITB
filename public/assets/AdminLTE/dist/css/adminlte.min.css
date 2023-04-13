@@ -9890,7 +9890,7 @@ a.text-dark:hover {
     z-index: 9999;
 }
 .dark-mode .preloader {
-    background-color: #454d55 !important;
+    background-color: #212121 !important;
     color: #fff;
 }
 html.scroll-smooth {
@@ -11980,7 +11980,7 @@ body:not(.layout-fixed) .main-sidebar .sidebar {
     border-color: #4b545c;
 }
 .dark-mode .content-wrapper {
-    background-color: #454d55;
+    background-color: #212121;
     color: #fff;
 }
 .dark-mode .content-wrapper .content-header {

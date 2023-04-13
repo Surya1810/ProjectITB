@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Buddy;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
 
 class BuddyController extends Controller
 {
@@ -14,7 +17,20 @@ class BuddyController extends Controller
      */
     public function index()
     {
-        return view('buddy.index');
+        $user = User::where('id', '!=', Auth::user()->id)->get()->shuffle();
+        // dd($user);
+        return view('buddy.index', compact('user'));
+    }
+
+    public function match($id)
+    {
+        $user = User::find($id);
+        return view('buddy.detail', compact('user'));
+    }
+
+    public function arrange()
+    {
+        return redirect()->route('buddy.index')->with(['pesan' => 'Meet Arranged', 'level-alert' => 'alert-success']);
     }
 
     /**
@@ -24,7 +40,6 @@ class BuddyController extends Controller
      */
     public function create()
     {
-        //
     }
 
     /**

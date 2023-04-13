@@ -1,10 +1,17 @@
 @extends('layouts.app')
 
 @section('title')
-    | Home
+    | Equipment
 @endsection
 
 @push('css')
+    <style>
+        #mybutton {
+            position: fixed;
+            bottom: 50px;
+            right: 10px;
+        }
+    </style>
 @endpush
 
 @section('content')
@@ -17,51 +24,53 @@
             </div>
         </div> --}}
     </div>
-
     <!-- Main content -->
     <div class="content">
         <div class="container">
-            <div class="row">
-                <div class="col-lg-4">
-                    <div class="card">
-                        <img class="card-img-top" src="{{ asset('storage/img/dummy.png') }}" alt="Card image cap">
-                        <div class="card-body">
-                            <h5 class="card-title">Card title</h5>
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of
-                                the
-                                card's content.</p>
-                            <a href="#" class="btn btn-primary">Go somewhere</a>
-                        </div>
+            <form action="{{ route('equipment.store') }}" method="POST">
+                @csrf
+                <div class="col-sm-12">
+                    <div class="row">
+                        @foreach ($equipment as $data)
+                            <div class="col-lg-4 col-12 my-3">
+                                <div class="card" style="border-radius: 20px">
+                                    <img class="card-img-top" src="{{ asset('assets/img/equipment/' . $data->image) }}"
+                                        style="border-radius: 20px; width:100%; min-height: 180px" alt="Card image cap">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-6">
+                                                <span>{{ $data->item }}</span>
+                                                <h5><strong>{{ $data->price }} / Use</strong></h5>
+                                            </div>
+                                            <div class="col-6">
+                                                <input class="float-md-right" type="checkbox" value="{{ $data->id }}"
+                                                    name="data[]" style="width: 20px;height: 20px;">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
                     </div>
                 </div>
-                <div class="col-lg-4">
-                    <div class="card">
-                        <img class="card-img-top" src="{{ asset('storage/img/dummy.png') }}" alt="Card image cap">
-                        <div class="card-body">
-                            <h5 class="card-title">Card title</h5>
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of
-                                the
-                                card's content.</p>
-                            <a href="#" class="btn btn-primary">Go somewhere</a>
-                        </div>
-                    </div>
+                <div id="mybutton">
+                    <button id="checkBtn" type="submit" class="btn btn-danger py-2 mb-2"><i
+                            class="fa-solid fa-cart-shopping"></i>Checkout</button>
                 </div>
-                <div class="col-lg-4">
-                    <div class="card">
-                        <img class="card-img-top" src="{{ asset('storage/img/dummy.png') }}" alt="Card image cap">
-                        <div class="card-body">
-                            <h5 class="card-title">Card title</h5>
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of
-                                the
-                                card's content.</p>
-                            <a href="#" class="btn btn-primary">Go somewhere</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            </form>
         </div>
     </div>
 @endsection
 
 @push('scripts')
+    <script>
+        $(document).ready(function() {
+            $("form").submit(function() {
+                if ($('input:checkbox').filter(':checked').length < 1) {
+                    alert("Check at least one item!");
+                    return false;
+                }
+            });
+        });
+    </script>
 @endpush

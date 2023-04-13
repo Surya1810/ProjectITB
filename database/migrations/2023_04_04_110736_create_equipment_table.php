@@ -14,7 +14,11 @@ class CreateEquipmentTable extends Migration
     public function up()
     {
         Schema::create('equipment', function (Blueprint $table) {
-            $table->id();
+            $table->increments('id');
+            $table->string('item');
+            $table->string('image');
+            $table->string('price');
+            $table->string('category');
             $table->timestamps();
         });
     }

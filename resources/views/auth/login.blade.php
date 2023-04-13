@@ -23,7 +23,11 @@
             <div class="col-md-8 my-auto">
                 <div class="card dark-mode" style="border-radius: 20px;">
                     <div class="card-body p-5">
-                        <h1 style="font-weight: 900;" class="mb-5"><i>Sign in</i></h1>
+
+                        <div class="row mb-3">
+                            <h1 style="font-weight: 900;" class="mb-5"><i>Sign in</i></h1>
+
+                        </div>
                         <form method="POST" action="{{ route('login') }}">
                             @csrf
 
@@ -79,6 +83,10 @@
                                     <button type="submit" class="btn btn-light px-3 mt-3">
                                         {{ __('Log in') }}
                                     </button>
+                                    <a href="{{ route('register') }}"
+                                        class="btn btn-dark bg-transparent float-right mt-3 border-0">
+                                        <i>Create Account?</i></i>
+                                    </a>
 
                                     {{-- @if (Route::has('password.request'))
                                         <a class="btn btn-link" href="{{ route('password.request') }}">

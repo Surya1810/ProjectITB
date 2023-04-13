@@ -12,9 +12,11 @@ class BookingController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($id)
     {
-        return view('booking.index');
+        $court = Booking::where('category', $id)->get();
+        $category = $id;
+        return view('booking.list', compact('court', 'category'));
     }
 
     /**
@@ -22,9 +24,10 @@ class BookingController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
-        //
+        $data = Booking::where('id', $request->id)->first();
+        return view('booking.detail', compact('data'));
     }
 
     /**
@@ -35,7 +38,12 @@ class BookingController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = Booking::find($request->id);
+        $subtotal = $data->price * 1000;
+        $ppn = $subtotal * 0.1;
+        $total = $subtotal + $ppn;
+        $code = 2;
+        return view('payment.index', compact('data', 'subtotal', 'ppn', 'total', 'code'));
     }
 
     /**

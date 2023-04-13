@@ -23,6 +23,8 @@
     <link rel="stylesheet" href="{{ asset('assets/adminLTE/dist/css/adminlte.min.css') }}">
     <!-- Our style -->
     <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
+    <!-- Toastr -->
+    <link rel="stylesheet" href="{{ asset('assets/adminLTE/plugins/toastr/toastr.min.css') }}">
 
     @stack('css')
 </head>
@@ -32,7 +34,7 @@
     <div class="wrapper">
         <!-- Preloader -->
         <div class="preloader flex-column justify-content-center align-items-center">
-            <img class="animation__shake" src="{{ asset('storage/img/logo.png') }}" alt="Best-logo" height="100"
+            <img class="animation__shake" src="{{ asset('assets/img/logo.png') }}" alt="Best-logo" height="100"
                 width="100">
         </div>
 
@@ -41,8 +43,8 @@
             style="background-image: linear-gradient(to right, #1acab2, #00b9b7, #00a8b7, #0096b1, #2984a6);">
             <div class="container">
                 <a href="{{ route('home') }}" class="navbar-brand">
-                    <img src="{{ asset('storage/img/logo.png') }}" alt="Logo" width="50px">
-                    <span class="brand-text font-weight-bold" style="font-size: 25x">Kumpul KeBo</span>
+                    <img src="{{ asset('assets/img/logo.png') }}" alt="Logo" width="40px">
+                    <span class="brand-text font-weight-bold" style="font-size: 25px">Kumpul KeBo</span>
                 </a>
                 {{-- 
                 <button class="navbar-toggler order-1" type="button" data-toggle="collapse"
@@ -64,16 +66,21 @@
                 </div> --}}
 
                 <!-- Right navbar links -->
-                <ul class="order-1 order-md-3 navbar-nav navbar-no-expand ml-auto">
+                <ul class="order-1 order-md-3 navbar-nav navbar-no-expand ml-auto mr-3">
                     @auth
-                        <li class="nav-item user-menu">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-widget="pushmenu" href="#" role="button">
+                                <i class="fa-solid fa-gear" style="font-size: 25px"></i>
+                            </a>
+                        </li>
+                        {{-- <li class="nav-item user-menu">
                             <a href="#" class="nav-link" data-widget="pushmenu" href="#" role="button">
                                 <span class="d-none d-md-inline"
                                     style="font-size: 20px;font-weight: 900"><span>@</span>{{ Auth::user()->username }}</span>
                                 <img src="{{ asset('assets/adminLTE/dist/img/avatar5.png') }}"
                                     class="user-image img-circle elevation-2" alt="User Image">
                             </a>
-                        </li>
+                        </li> --}}
                     @endauth
                     @guest
                         <li class="nav-item">
@@ -92,8 +99,8 @@
             <!-- Main Sidebar Container -->
             <aside class="main-sidebar sidebar-dark-primary elevation-4">
                 <!-- Brand Logo -->
-                <a href="{{ route('home') }}" class="brand-link">
-                    <img src="{{ asset('storage/img/logo.png') }}" alt="AdminLTE Logo" width="30px">
+                <a href="{{ route('home') }}" class="brand-link text-center">
+                    <img src="{{ asset('assets/img/logo.png') }}" alt="AdminLTE Logo" width="30px">
                     <span class="brand-text font-weight-bold">Kumpul KeBo</span>
                 </a>
 
@@ -143,17 +150,20 @@
         </div>
         <!-- /.content-wrapper -->
 
+        <div class="main-footer"
+            style="background-image: radial-gradient(circle, #1ddec3, #00c8c6, #00b2c2, #009bb7, #2984a6);height: 50px;">
+        </div>
         <!-- Main Footer -->
-        <footer class="main-footer"
-            style="background-image: radial-gradient(circle, #1ddec3, #00c8c6, #00b2c2, #009bb7, #2984a6);">
-            {{-- <!-- To the right -->
+        {{-- <footer class="main-footer"
+            style="background-image: radial-gradient(circle, #1ddec3, #00c8c6, #00b2c2, #009bb7, #2984a6);height: 75px;">
+            <!-- To the right -->
             <div class="float-right d-none d-sm-inline">
                 Anything you want
             </div>
             <!-- Default to the left -->
             <strong>Copyright &copy; 2014-2021 <a href="https://adminlte.io">AdminLTE.io</a>.</strong> All rights
-            reserved. --}}
-        </footer>
+            reserved.
+        </footer> --}}
     </div>
     <!-- ./wrapper -->
 
@@ -163,8 +173,26 @@
     <script src="{{ asset('assets/adminLTE/plugins/jquery/jquery.min.js') }}"></script>
     <!-- Bootstrap 4 -->
     <script src="{{ asset('assets/adminLTE/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ asset('assets/adminLTE/plugins/toastr/toastr.min.js') }}"></script>
+
 
     @stack('script')
+    <script>
+        @if (session('pesan'))
+            @switch(session('level-alert'))
+                @case('alert-success')
+                toastr.success("{{ Session::get('pesan') }}", 'Success');
+                @break
+
+                @case('alert-danger')
+                toastr.error("{{ Session::get('pesan') }}", 'Error');
+                @break
+
+                @default
+                toastr.info('test', 'info');
+            @endswitch
+        @endif
+    </script>
 
     <!-- AdminLTE App -->
     <script src="{{ asset('assets/adminLTE/dist/js/adminlte.min.js') }}"></script>

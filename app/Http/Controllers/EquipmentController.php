@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Equipment;
 use Illuminate\Http\Request;
 
+use function PHPUnit\Framework\isEmpty;
+
 class EquipmentController extends Controller
 {
     /**
@@ -14,7 +16,8 @@ class EquipmentController extends Controller
      */
     public function index()
     {
-        return view('equipment.index');
+        $equipment = Equipment::all();
+        return view('equipment.index', compact('equipment'));
     }
 
     /**
@@ -22,9 +25,10 @@ class EquipmentController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
-        //
+        $order = $request;
+        return view('equipment.order_detail', compact('order'));
     }
 
     /**
@@ -35,7 +39,19 @@ class EquipmentController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        if (isset($request->data)) {
+            $data = Equipment::whereIn('id', $request->data)->get();
+
+            $subtotal = $data->sum('price') * 1000;
+            $ppn = $subtotal * 0.1;
+            $shipping = 15000;
+            $total = $subtotal + $ppn + $shipping;
+            $code = 1;
+
+            return view('payment.index', compact('data', 'subtotal', 'ppn', 'total', 'code'));
+        } else {
+            return redirect()->route('equipment.index')->with(['pesan' => 'Choose at least 1 item', 'level-alert' => 'alert-danger']);
+        }
     }
 
     /**
@@ -44,9 +60,9 @@ class EquipmentController extends Controller
      * @param  \App\Models\Equipment  $equipment
      * @return \Illuminate\Http\Response
      */
-    public function show(Equipment $equipment)
+    public function done()
     {
-        //
+        return redirect()->route('home')->with(['pesan' => 'Paid', 'level-alert' => 'alert-success']);
     }
 
     /**

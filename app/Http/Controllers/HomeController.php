@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class HomeController extends Controller
 {
@@ -43,8 +44,22 @@ class HomeController extends Controller
         if (!User::find($id)->register_stage == 'stage_3') {
             return redirect()->route('stage_3');
         } else {
+            // dd($request);
+            $request->validate([
+                'username' => 'bail|required|unique:users,username',
+                'profile' => 'required'
+            ]);
             $user = User::find($id);
             $user->username = $request->username;
+            $data = $request->file('profile');
+            if (isset($data)) {
+                $fileName = $user->id . '.' . $data->getClientOriginalExtension();
+                if (!Storage::disk('public')->exists('profile/')) {
+                    Storage::disk('public')->makeDirectory('profile/');
+                }
+                $data->move('storage/profile/', $fileName);
+                $user->picture = $fileName;
+            }
             $user->register_stage = 'stage_3';
             $user->save();
             return redirect()->route('stage_3');
@@ -60,7 +75,7 @@ class HomeController extends Controller
             $user->fav_sport = $request->fav_sport;
             $user->register_stage = 'done';
             $user->save();
-            return redirect()->route('home');
+            return redirect()->route('home')->with(['pesan' => 'Your account is fully setup', 'level-alert' => 'alert-success']);
         }
     }
 }
